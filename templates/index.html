@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Username Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>🎮 Steam Username Checker</h1>
+                <p class="subtitle">Check if a Steam username is available for account creation</p>
+            </div>
+            
+            <div class="search-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="usernameInput" 
+                        placeholder="Enter username to check..."
+                        maxlength="32"
+                        autocomplete="off"
+                    >
+                    <button id="checkButton" type="button">
+                        <span id="buttonText">Check</span>
+                        <span id="buttonLoader" class="loader" style="display: none;"></span>
+                    </button>
+                </div>
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                <div class="generate-section">
+                    <div class="generate-controls">
+                        <div class="control-group">
+                            <label for="usernameCount">Number of options:</label>
+                            <input type="number" id="usernameCount" min="1" max="50" value="20" class="number-input">
+                        </div>
+                        <div class="control-group">
+                            <label for="usernameLength">Length:</label>
+                            <input type="number" id="usernameLength" min="3" max="32" value="8" class="number-input">
+                        </div>
+                        <div class="control-group">
+                            <label for="useWords" class="checkbox-label">
+                                <input type="checkbox" id="useWords">
+                                <span>Use words</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="generate-options">
+                        <div class="control-group">
+                            <label for="includeNumbers" class="checkbox-label">
+                                <input type="checkbox" id="includeNumbers" checked>
+                                <span>Include numbers</span>
+                            </label>
+                        </div>
+                        <div class="control-group">
+                            <label for="includeSpecial" class="checkbox-label">
+                                <input type="checkbox" id="includeSpecial" checked>
+                                <span>Include special chars (_)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button id="generateButton" type="button" class="generate-btn">
+                        <span id="generateButtonText">🎲 Generate Username Options</span>
+                        <span id="generateButtonLoader" class="loader" style="display: none;"></span>
+                    </button>
+                </div>
+                <div class="hint">
+                    Username must be 3-32 characters (letters, numbers, underscores only)
+                </div>
+            </div>
+            
+            <div id="resultContainer" class="result-container" style="display: none;">
+                <div id="resultMessage" class="result-message"></div>
+            </div>
+            
+            <div id="usernameListContainer" class="username-list-container" style="display: none;">
+                <h3 class="list-header">Generated Usernames</h3>
+                <div id="usernameList" class="username-list"></div>
+            </div>
+            
+            <div class="info-section">
+                <h3>How it works</h3>
+                <ul>
+                    <li>Enter a username to check, or generate multiple options</li>
+                    <li>Choose how many usernames to generate and their length</li>
+                    <li>Select "Use words" to generate from dictionary words, or random characters</li>
+                    <li>Click "Check" on any generated username to verify availability</li>
+                    <li>Results are based on Steam profile availability</li>
+                </ul>
+                <div class="disclaimer">
+                    <strong>Note:</strong> This tool checks Steam profile URLs. Results may not be 100% accurate for account creation, as Steam may have additional restrictions.
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="footer-links">
+                    <a href="https://github.com/Nxzume" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <span class="separator">•</span>
+                    <a href="https://nozume.com" target="_blank" rel="noopener noreferrer">Website</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
