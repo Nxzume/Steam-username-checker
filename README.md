@@ -4,7 +4,8 @@ A simple web application to check if Steam usernames are available for account c
 
 **Created by [Nxzume](https://github.com/Nxzume)**
 
-https://cdn.nozume.com/u/xnFC0Z.png
+<img width="2558" height="1318" alt="image" src="https://github.com/user-attachments/assets/2a29a5b4-4663-49fe-9dc8-b83eed2bc016" />
+
 
 ## Features
 
@@ -96,5 +97,6 @@ This project is open source and available for personal use.
 ## Disclaimer
 
 This tool is for informational purposes only. Steam's username availability may change, and this tool does not guarantee that a username will be available for account creation. Always verify availability directly on Steam when creating an account.
+
 
 
