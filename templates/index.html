@@ -3,117 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanity — Steam Username Checker</title>
-    <meta name="description" content="Check Steam vanity URL availability and generate clean username options.">
+    <title>Steam Username Checker — Free Availability Tool</title>
+    <meta name="description" content="Free Steam username checker. Instantly see if a Steam vanity URL is available, or generate username ideas with numbers, underscores, and dictionary words.">
+    <meta name="keywords" content="steam username checker, steam name availability, steam vanity url, check steam username, steam username generator, is steam name taken">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="Nozume">
+    <meta name="theme-color" content="#0a0c10">
+    <link rel="canonical" href="https://steam.nozume.com/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Steam Username Checker">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://steam.nozume.com/">
+    <meta property="og:title" content="Steam Username Checker — Free Availability Tool">
+    <meta property="og:description" content="Check if a Steam username is available and generate clean username options in seconds.">
+    <meta property="og:image" content="https://steam.nozume.com/static/og.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Steam Username Checker — Free Availability Tool">
+    <meta name="twitter:description" content="Check if a Steam username is available and generate clean username options in seconds.">
+    <meta name="twitter:image" content="https://steam.nozume.com/static/og.png">
+
+    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Steam Username Checker",
+          "url": "https://steam.nozume.com/",
+          "description": "Free tool to check Steam username availability and generate username ideas.",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Any",
+          "browserRequirements": "Requires JavaScript",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Nozume",
+            "url": "https://nozume.com"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "name": "Steam Username Checker",
+          "url": "https://steam.nozume.com/",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does the Steam username checker work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It checks whether a Steam community vanity URL (steamcommunity.com/id/username) already resolves to a profile. If no profile is found, the name is likely available."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What characters are allowed in a Steam username?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Steam vanity usernames are typically 3–32 characters and can include letters, numbers, and underscores."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is this Steam username checker free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. You can check availability and generate username options for free."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
-    <div class="bg" aria-hidden="true"></div>
+    <div class="frame">
+        <header class="topbar">
+            <a class="brand" href="/" aria-label="Steam Username Checker home">
+                <span class="brand-glyph" aria-hidden="true">S</span>
+                <span class="brand-text">Steam Checker</span>
+            </a>
+            <nav class="nav" aria-label="Primary">
+                <a href="#generate">Generate</a>
+                <a href="#faq">FAQ</a>
+                <a href="https://github.com/Nxzume/Steam-username-checker" target="_blank" rel="noopener noreferrer">Source</a>
+            </nav>
+        </header>
 
-    <header class="topbar">
-        <a class="brand" href="/">
-            <span class="brand-mark" aria-hidden="true"></span>
-            <span class="brand-name">Vanity</span>
-        </a>
-        <nav class="topnav">
-            <a href="#generator">Generate</a>
-            <a href="https://github.com/Nxzume/Steam-username-checker" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a class="nav-cta" href="https://nozume.com" target="_blank" rel="noopener noreferrer">Nozume</a>
-        </nav>
-    </header>
+        <main>
+            <section class="hero">
+                <div class="hero-copy">
+                    <h1>Steam Username Checker</h1>
+                    <p>Free tool to check if a Steam username is available, or generate a list of options and verify them one by one.</p>
+                </div>
 
-    <main class="shell">
-        <section class="hero">
-            <p class="eyebrow">Steam vanity tools</p>
-            <h1 class="brand-hero">Vanity</h1>
-            <p class="lede">Check if a Steam username is free, or generate a batch of clean options in seconds.</p>
-
-            <div class="tool-panel">
-                <label class="field-label" for="usernameInput">Check a username</label>
-                <div class="input-group">
-                    <div class="input-shell">
-                        <span class="input-prefix">steamcommunity.com/id/</span>
-                        <input
-                            type="text"
-                            id="usernameInput"
-                            placeholder="yourname"
-                            maxlength="32"
-                            autocomplete="off"
-                            spellcheck="false"
-                        >
+                <div class="panel check-panel">
+                    <div class="panel-label">Availability check</div>
+                    <div class="input-group">
+                        <div class="field">
+                            <span class="field-prefix">/id/</span>
+                            <input
+                                type="text"
+                                id="usernameInput"
+                                placeholder="username"
+                                maxlength="32"
+                                autocomplete="off"
+                                spellcheck="false"
+                                aria-label="Steam username to check"
+                            >
+                        </div>
+                        <button id="checkButton" type="button" class="btn btn-primary">
+                            <span id="buttonText">Check</span>
+                            <span id="buttonLoader" class="loader" style="display: none;"></span>
+                        </button>
                     </div>
-                    <button id="checkButton" type="button" class="btn btn-primary">
-                        <span id="buttonText">Check availability</span>
-                        <span id="buttonLoader" class="loader" style="display: none;"></span>
+                    <p class="hint">3–32 chars · letters, numbers, underscore</p>
+
+                    <div id="resultContainer" class="result-container" style="display: none;">
+                        <div id="resultMessage" class="result-message" role="status" aria-live="polite"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="generate" class="generate-section">
+                <div class="section-rule">
+                    <h2>Generate Steam usernames</h2>
+                    <p>Build a shortlist, then verify each handle inline.</p>
+                </div>
+
+                <div class="panel">
+                    <div class="controls">
+                        <label class="control">
+                            <span>Count</span>
+                            <input type="number" id="usernameCount" min="1" max="50" value="12" class="number-input">
+                        </label>
+                        <label class="control">
+                            <span>Length</span>
+                            <input type="number" id="usernameLength" min="3" max="32" value="8" class="number-input">
+                        </label>
+                        <div class="switches">
+                            <label class="switch">
+                                <input type="checkbox" id="useWords">
+                                <span>Words</span>
+                            </label>
+                            <label class="switch">
+                                <input type="checkbox" id="includeNumbers" checked>
+                                <span>Numbers</span>
+                            </label>
+                            <label class="switch">
+                                <input type="checkbox" id="includeSpecial" checked>
+                                <span>Underscore</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="generateButton" type="button" class="btn btn-secondary">
+                        <span id="generateButtonText">Generate usernames</span>
+                        <span id="generateButtonLoader" class="loader" style="display: none;"></span>
                     </button>
-                </div>
-                <p class="hint">3–32 characters. Letters, numbers, and underscores only.</p>
 
-                <div id="resultContainer" class="result-container" style="display: none;">
-                    <div id="resultMessage" class="result-message"></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="generator" class="generator">
-            <div class="section-head">
-                <h2>Generate options</h2>
-                <p>Create a shortlist, then check any name without leaving the page.</p>
-            </div>
-
-            <div class="tool-panel generator-panel">
-                <div class="controls-grid">
-                    <div class="control-group">
-                        <label for="usernameCount">Count</label>
-                        <input type="number" id="usernameCount" min="1" max="50" value="12" class="number-input">
-                    </div>
-                    <div class="control-group">
-                        <label for="usernameLength">Length</label>
-                        <input type="number" id="usernameLength" min="3" max="32" value="8" class="number-input">
-                    </div>
-                    <div class="control-group toggles">
-                        <label for="useWords" class="checkbox-label">
-                            <input type="checkbox" id="useWords">
-                            <span>Dictionary words</span>
-                        </label>
-                        <label for="includeNumbers" class="checkbox-label">
-                            <input type="checkbox" id="includeNumbers" checked>
-                            <span>Numbers</span>
-                        </label>
-                        <label for="includeSpecial" class="checkbox-label">
-                            <input type="checkbox" id="includeSpecial" checked>
-                            <span>Underscores</span>
-                        </label>
+                    <div id="usernameListContainer" class="username-list-container" style="display: none;">
+                        <div class="list-header">Results</div>
+                        <div id="usernameList" class="username-list"></div>
                     </div>
                 </div>
+            </section>
 
-                <button id="generateButton" type="button" class="btn btn-secondary">
-                    <span id="generateButtonText">Generate usernames</span>
-                    <span id="generateButtonLoader" class="loader loader-dark" style="display: none;"></span>
-                </button>
-
-                <div id="usernameListContainer" class="username-list-container" style="display: none;">
-                    <div class="list-header-row">
-                        <h3 class="list-header">Generated usernames</h3>
-                    </div>
-                    <div id="usernameList" class="username-list"></div>
+            <section id="faq" class="faq-section">
+                <div class="section-rule">
+                    <h2>FAQ</h2>
+                    <p>Quick answers about Steam name availability.</p>
                 </div>
-            </div>
-        </section>
+                <div class="faq-list">
+                    <article class="faq-item">
+                        <h3>How does this Steam username checker work?</h3>
+                        <p>It looks up the Steam community vanity URL for the name you enter. If no public profile is found at <code>steamcommunity.com/id/yourname</code>, the username is likely available.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h3>What makes a valid Steam username?</h3>
+                        <p>Most Steam vanity usernames are 3–32 characters and allow letters, numbers, and underscores. This tool follows those common rules when generating ideas.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h3>Is the result always accurate for account creation?</h3>
+                        <p>Results are based on public Steam profile URLs. Steam may still block some names during signup even if a profile page is empty.</p>
+                    </article>
+                </div>
+            </section>
+        </main>
 
-        <section class="notes">
-            <p>Results are based on public Steam profile URLs and may not match every account-creation rule Steam enforces.</p>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <span>Built by <a href="https://nozume.com" target="_blank" rel="noopener noreferrer">Nozume</a></span>
-        <span class="dot" aria-hidden="true"></span>
-        <a href="https://github.com/Nxzume" target="_blank" rel="noopener noreferrer">GitHub</a>
-    </footer>
+        <footer class="footer">
+            <span>Based on public Steam profile URLs — not a guarantee for account creation.</span>
+            <a href="https://nozume.com" target="_blank" rel="noopener noreferrer">nozume.com</a>
+        </footer>
+    </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

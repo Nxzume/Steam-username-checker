@@ -181,10 +181,39 @@ def set_security_headers(response):
     )
     return response
 
+SITE_URL = os.environ.get('SITE_URL', 'https://steam.nozume.com').rstrip('/')
+
+
 @app.route('/health')
 @app.route('/api/health')
 def health():
     return jsonify({'status': 'ok'}), 200
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    body = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /api/\n"
+        "Disallow: /health\n"
+        f"Sitemap: {SITE_URL}/sitemap.xml\n"
+    )
+    return app.response_class(body, mimetype='text/plain')
+
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    body = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{SITE_URL}/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+"""
+    return app.response_class(body, mimetype='application/xml')
 
 
 @app.route('/')
