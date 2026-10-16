@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, url_for
 from flask_cors import CORS
 from markupsafe import escape
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -9,6 +9,8 @@ import string
 import time
 import urllib.parse
 import os
+import hashlib
+from pathlib import Path
 
 # Try to import nltk for dictionary words
 try:
@@ -30,6 +32,36 @@ app = Flask(__name__)
 # Coolify / Traefik sit in front of the container
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 CORS(app)
+
+# Avoid Flask default long-lived static caching; we cache-bust with ?v= hashes instead
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
+_STATIC_VERSION_CACHE = {}
+
+
+def static_asset_version(filename):
+    """Return a short content hash for a static file so browsers fetch updates."""
+    cached = _STATIC_VERSION_CACHE.get(filename)
+    path = Path(app.static_folder) / filename
+    try:
+        mtime = path.stat().st_mtime_ns
+    except OSError:
+        return '1'
+
+    if cached and cached[0] == mtime:
+        return cached[1]
+
+    digest = hashlib.sha1(path.read_bytes()).hexdigest()[:10]
+    _STATIC_VERSION_CACHE[filename] = (mtime, digest)
+    return digest
+
+
+@app.context_processor
+def inject_versioned_static():
+    def versioned_static(filename):
+        return url_for('static', filename=filename, v=static_asset_version(filename))
+
+    return {'versioned_static': versioned_static}
 
 
 def sanitize_username(username):
@@ -155,18 +187,34 @@ def check_steam_username_availability(username):
 
 @app.after_request
 def set_security_headers(response):
-    """Set security headers and fix MIME types for static files."""
+    """Set security/cache headers and fix MIME types for static files."""
     # Fix MIME types for static files (Flask sometimes serves JS as text/plain)
     path = request.path
     content_type = response.headers.get('Content-Type', '')
-    
+
     if path.endswith('.js'):
         if 'text/plain' in content_type or 'text/html' in content_type or not content_type:
             response.headers['Content-Type'] = 'application/javascript; charset=utf-8'
     elif path.endswith('.css'):
         if 'text/plain' in content_type or 'text/html' in content_type or not content_type:
             response.headers['Content-Type'] = 'text/css; charset=utf-8'
-    
+
+    # HTML/API: always revalidate so deploys show up immediately (Cloudflare + browsers)
+    if path.startswith('/api/') or path in ('/', '/health', '/robots.txt', '/sitemap.xml') or 'text/html' in content_type:
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        response.headers['CDN-Cache-Control'] = 'no-store'
+        response.headers['Cloudflare-CDN-Cache-Control'] = 'no-store'
+    # Versioned static assets (?v=hash): safe to cache hard
+    elif path.startswith('/static/') and request.args.get('v'):
+        response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+        response.headers['CDN-Cache-Control'] = 'public, max-age=31536000'
+    else:
+        response.headers['Cache-Control'] = 'no-cache, must-revalidate'
+        response.headers['CDN-Cache-Control'] = 'no-store'
+        response.headers['Cloudflare-CDN-Cache-Control'] = 'no-store'
+
     # Set security headers
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'

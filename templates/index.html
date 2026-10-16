@@ -24,11 +24,11 @@
     <meta name="twitter:description" content="Check if a Steam username is available and generate clean username options in seconds.">
     <meta name="twitter:image" content="https://steam.nozume.com/static/og.png">
 
-    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ versioned_static('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ versioned_static('style.css') }}">
 
     <script type="application/ld+json">
     {
@@ -213,6 +213,6 @@
         </footer>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ versioned_static('script.js') }}"></script>
 </body>
 </html>
