@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 from markupsafe import escape
+from werkzeug.middleware.proxy_fix import ProxyFix
 import requests
 import re
 import random
@@ -26,6 +27,8 @@ except (ImportError, Exception):
     HAS_DICTIONARY = False
 
 app = Flask(__name__)
+# Coolify / Traefik sit in front of the container
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 CORS(app)
 
 
@@ -170,6 +173,12 @@ def set_security_headers(response):
     response.headers['X-XSS-Protection'] = '1; mode=block'
     response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
     return response
+
+@app.route('/health')
+@app.route('/api/health')
+def health():
+    return jsonify({'status': 'ok'}), 200
+
 
 @app.route('/')
 def index():
@@ -356,7 +365,7 @@ def generate_usernames_endpoint():
 
 if __name__ == '__main__':
     host = os.environ.get('FLASK_HOST', '0.0.0.0')
-    port = int(os.environ.get('PORT', os.environ.get('FLASK_PORT', 5000)))
+    port = int(os.environ.get('PORT', os.environ.get('FLASK_PORT', 3000)))
     debug = os.environ.get('FLASK_ENV', 'production') == 'development'
     app.run(host=host, port=port, debug=debug)
 
