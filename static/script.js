@@ -112,13 +112,13 @@ async function checkUsername() {
         if (data.error) {
             showResult(escapeHtml(data.error), 'error');
         } else if (data.available === true) {
-            showResult(`✅ ${escapeHtml(data.message)}`, 'available');
+            showResult(`Available — ${escapeHtml(data.message)}`, 'available');
         } else if (data.available === false) {
-            let message = `❌ ${escapeHtml(data.message)}`;
+            let message = `Taken — ${escapeHtml(data.message)}`;
             if (data.profile_url) {
                 const safeUrl = escapeUrl(data.profile_url);
                 if (safeUrl) {
-                    message += `<br><a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="profile-link">View Profile →</a>`;
+                    message += ` <a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="profile-link">View profile</a>`;
                 }
             }
             showResult(message, 'taken');
@@ -246,7 +246,8 @@ function displayUsernameList(usernames) {
         item.appendChild(usernameSpan);
         item.appendChild(button);
         item.appendChild(statusDiv);
-        
+        item.style.animationDelay = `${index * 0.03}s`;
+
         list.appendChild(item);
     });
     
@@ -306,17 +307,17 @@ async function checkSingleUsername(username, index) {
             statusDiv.innerHTML = `<span class="status-error">${escapeHtml(data.error)}</span>`;
             statusDiv.className = 'username-status error';
         } else if (data.available === true) {
-            statusDiv.innerHTML = `<span class="status-available">✅ Available</span>`;
+            statusDiv.innerHTML = `<span class="status-available">Available</span>`;
             statusDiv.className = 'username-status available';
             if (usernameInput) {
                 usernameInput.value = username;
             }
         } else if (data.available === false) {
-            let statusHtml = `<span class="status-taken">❌ Taken</span>`;
+            let statusHtml = `<span class="status-taken">Taken</span>`;
             if (data.profile_url) {
                 const safeUrl = escapeUrl(data.profile_url);
                 if (safeUrl) {
-                    statusHtml += ` <a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="status-link">View Profile</a>`;
+                    statusHtml += ` <a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="status-link">View profile</a>`;
                 }
             }
             statusDiv.innerHTML = statusHtml;

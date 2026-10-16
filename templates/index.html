@@ -3,109 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steam Username Checker</title>
+    <title>Vanity — Steam Username Checker</title>
+    <meta name="description" content="Check Steam vanity URL availability and generate clean username options.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="header">
-                <h1>🎮 Steam Username Checker</h1>
-                <p class="subtitle">Check if a Steam username is available for account creation</p>
-            </div>
-            
-            <div class="search-section">
+    <div class="bg" aria-hidden="true"></div>
+
+    <header class="topbar">
+        <a class="brand" href="/">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span class="brand-name">Vanity</span>
+        </a>
+        <nav class="topnav">
+            <a href="#generator">Generate</a>
+            <a href="https://github.com/Nxzume/Steam-username-checker" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="nav-cta" href="https://nozume.com" target="_blank" rel="noopener noreferrer">Nozume</a>
+        </nav>
+    </header>
+
+    <main class="shell">
+        <section class="hero">
+            <p class="eyebrow">Steam vanity tools</p>
+            <h1 class="brand-hero">Vanity</h1>
+            <p class="lede">Check if a Steam username is free, or generate a batch of clean options in seconds.</p>
+
+            <div class="tool-panel">
+                <label class="field-label" for="usernameInput">Check a username</label>
                 <div class="input-group">
-                    <input 
-                        type="text" 
-                        id="usernameInput" 
-                        placeholder="Enter username to check..."
-                        maxlength="32"
-                        autocomplete="off"
-                    >
-                    <button id="checkButton" type="button">
-                        <span id="buttonText">Check</span>
+                    <div class="input-shell">
+                        <span class="input-prefix">steamcommunity.com/id/</span>
+                        <input
+                            type="text"
+                            id="usernameInput"
+                            placeholder="yourname"
+                            maxlength="32"
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                    </div>
+                    <button id="checkButton" type="button" class="btn btn-primary">
+                        <span id="buttonText">Check availability</span>
                         <span id="buttonLoader" class="loader" style="display: none;"></span>
                     </button>
                 </div>
-                <div class="divider">
-                    <span>OR</span>
+                <p class="hint">3–32 characters. Letters, numbers, and underscores only.</p>
+
+                <div id="resultContainer" class="result-container" style="display: none;">
+                    <div id="resultMessage" class="result-message"></div>
                 </div>
-                <div class="generate-section">
-                    <div class="generate-controls">
-                        <div class="control-group">
-                            <label for="usernameCount">Number of options:</label>
-                            <input type="number" id="usernameCount" min="1" max="50" value="20" class="number-input">
-                        </div>
-                        <div class="control-group">
-                            <label for="usernameLength">Length:</label>
-                            <input type="number" id="usernameLength" min="3" max="32" value="8" class="number-input">
-                        </div>
-                        <div class="control-group">
-                            <label for="useWords" class="checkbox-label">
-                                <input type="checkbox" id="useWords">
-                                <span>Use words</span>
-                            </label>
-                        </div>
+            </div>
+        </section>
+
+        <section id="generator" class="generator">
+            <div class="section-head">
+                <h2>Generate options</h2>
+                <p>Create a shortlist, then check any name without leaving the page.</p>
+            </div>
+
+            <div class="tool-panel generator-panel">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="usernameCount">Count</label>
+                        <input type="number" id="usernameCount" min="1" max="50" value="12" class="number-input">
                     </div>
-                    <div class="generate-options">
-                        <div class="control-group">
-                            <label for="includeNumbers" class="checkbox-label">
-                                <input type="checkbox" id="includeNumbers" checked>
-                                <span>Include numbers</span>
-                            </label>
-                        </div>
-                        <div class="control-group">
-                            <label for="includeSpecial" class="checkbox-label">
-                                <input type="checkbox" id="includeSpecial" checked>
-                                <span>Include special chars (_)</span>
-                            </label>
-                        </div>
+                    <div class="control-group">
+                        <label for="usernameLength">Length</label>
+                        <input type="number" id="usernameLength" min="3" max="32" value="8" class="number-input">
                     </div>
-                    <button id="generateButton" type="button" class="generate-btn">
-                        <span id="generateButtonText">🎲 Generate Username Options</span>
-                        <span id="generateButtonLoader" class="loader" style="display: none;"></span>
-                    </button>
+                    <div class="control-group toggles">
+                        <label for="useWords" class="checkbox-label">
+                            <input type="checkbox" id="useWords">
+                            <span>Dictionary words</span>
+                        </label>
+                        <label for="includeNumbers" class="checkbox-label">
+                            <input type="checkbox" id="includeNumbers" checked>
+                            <span>Numbers</span>
+                        </label>
+                        <label for="includeSpecial" class="checkbox-label">
+                            <input type="checkbox" id="includeSpecial" checked>
+                            <span>Underscores</span>
+                        </label>
+                    </div>
                 </div>
-                <div class="hint">
-                    Username must be 3-32 characters (letters, numbers, underscores only)
-                </div>
-            </div>
-            
-            <div id="resultContainer" class="result-container" style="display: none;">
-                <div id="resultMessage" class="result-message"></div>
-            </div>
-            
-            <div id="usernameListContainer" class="username-list-container" style="display: none;">
-                <h3 class="list-header">Generated Usernames</h3>
-                <div id="usernameList" class="username-list"></div>
-            </div>
-            
-            <div class="info-section">
-                <h3>How it works</h3>
-                <ul>
-                    <li>Enter a username to check, or generate multiple options</li>
-                    <li>Choose how many usernames to generate and their length</li>
-                    <li>Select "Use words" to generate from dictionary words, or random characters</li>
-                    <li>Click "Check" on any generated username to verify availability</li>
-                    <li>Results are based on Steam profile availability</li>
-                </ul>
-                <div class="disclaimer">
-                    <strong>Note:</strong> This tool checks Steam profile URLs. Results may not be 100% accurate for account creation, as Steam may have additional restrictions.
+
+                <button id="generateButton" type="button" class="btn btn-secondary">
+                    <span id="generateButtonText">Generate usernames</span>
+                    <span id="generateButtonLoader" class="loader loader-dark" style="display: none;"></span>
+                </button>
+
+                <div id="usernameListContainer" class="username-list-container" style="display: none;">
+                    <div class="list-header-row">
+                        <h3 class="list-header">Generated usernames</h3>
+                    </div>
+                    <div id="usernameList" class="username-list"></div>
                 </div>
             </div>
-            
-            <div class="footer">
-                <div class="footer-links">
-                    <a href="https://github.com/Nxzume" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <span class="separator">•</span>
-                    <a href="https://nozume.com" target="_blank" rel="noopener noreferrer">Website</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+        </section>
+
+        <section class="notes">
+            <p>Results are based on public Steam profile URLs and may not match every account-creation rule Steam enforces.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span>Built by <a href="https://nozume.com" target="_blank" rel="noopener noreferrer">Nozume</a></span>
+        <span class="dot" aria-hidden="true"></span>
+        <a href="https://github.com/Nxzume" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </footer>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
-
